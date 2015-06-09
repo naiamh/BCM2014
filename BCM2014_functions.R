@@ -103,6 +103,8 @@ ncdf2ras <- function(model='HST',var='cwd',year='1920',mstart=1,mend=12,
   #return(list(rstack,meta))
 }
 
+print('hey')
+
 MTseries <- function(pts.ta,var='cwd',ystart=1920,yend=2009,model='HST',verbose=F) {
   # this function returns a matrix of the values of var by month from the start to end year
   # extracted at each of the points in pts.ta 
