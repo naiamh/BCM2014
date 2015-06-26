@@ -85,7 +85,7 @@ for(mm in 1:length(vars)) {
     } else if(var == 'tmx') {
       aver <- monthlytowyrave(wyrs[k], noyrs=noyrs, m=mod, v=var, #change to oneyrave
                         cdir=paste(idir,var,'/',sep=''), tdir=tdir, wyrIn=wyrIn, submonths=c(6:8))
-      fname <- paste('BCM2014_jjf',wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
+      fname <- paste('BCM2014_jja',wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
     }
     
     aver <- readAll(aver)
