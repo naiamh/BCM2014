@@ -11,16 +11,17 @@
 
 # clear workspace
 rm(list=ls())
+require(raster)
 
 # set directories
 # Input directory
-idir <- '/Volumes/ACKBACK/BCM/CA_2014/Rdata/'
+idir <- '/Volumes/DAckerly_B/BCM/CA_2014/HST/monthly/Rdata/'
 # Script directory
-sdir <- '/Users/climchange/Documents/ClimateData/BCM_2014/'
+sdir <- '/Users/david/Documents/Projects/ClimateData/BCM2014_naiamh/'
 # Output directory
-odir <- '/Volumes/NMHTB/BCM/CA_2014/Summary/Water_years/'
+odir <- '/Volumes/DAckerly_B/BCM/CA_2014/Summary/Water_years/'
 # Temporary directory
-tdir <- '/Volumes/ACKBACK/BCM/CA_2014/tmp/'
+tdir <- '/Volumes/DAckerly_B/BCM/tmp/'
 
 # load functions
 source(paste(sdir, 'BCM2014_summary_functions.r',sep=''))
@@ -28,21 +29,22 @@ correctExt <- readRDS(paste(idir,'correctExtent.rdata',sep='')) #---- copy corre
 
 
 # Create 1 year summary across water years
-vars <- c("tmn","tmx","ppt","run","rch","cwd","aet","pet","str")
+vars <- c("tmn","tmx","ppt","cwd","aet","pet","str","run","rch")
 mod <- "HST"
 noyrs <- 1
 wyrIn <- FALSE # is the input in water years? FALSE if historic, TRUE if futures
 wyrs <- 1921:2009
 
-mm=2
+mm=6
 for(mm in 1:length(vars)) {
   
   k=1
   for(k in 1:length(wyrs)) {
-    print(Sys.time())
+    print(c(mm,k))
     aver <- monthlytowyrave(wyrs[k], noyrs=noyrs, m=mod, v=vars[mm],
                        cdir=paste(idir,vars[mm],'/',sep=''), tdir=tdir, wyrIn=wyrIn)
     aver <- readAll(aver)
+    if (vars[mm] %in% c('aet','cwd','pet','ppt','rch','run')) aver=aver*12
     extent(aver) <- correctExt
     fname <- paste("BCM2014_",vars[mm],wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
     fpath <- paste(odir,fname,sep='')
@@ -53,6 +55,7 @@ for(mm in 1:length(vars)) {
     # Erase the temporary files
     print("erasing temporary files")
     file.remove(paste(tdir,dir(tdir),sep=""))
+    #print(Sys.time())
   }
 }
 
@@ -67,7 +70,7 @@ mod <- "HST"
 vars <- c('tmn','tmx')
 noyrs <- 1
 wyrIn <- FALSE # is the input in water years?
-wyrs <- 1921:2009
+wyrs <- 1896:2014
 
 
 mm=1
@@ -79,13 +82,13 @@ for(mm in 1:length(vars)) {
     print(Sys.time())
     
     if(var == 'tmn') {
-      aver <- monthlytowyrave(wyrs[k], noyrs=noyrs, m=mod, v=var, #change to oneyrave
-                       cdir=paste(idir,var,'/',sep=''), tdir=tdir, wyrIn=wyrIn, submonths=c(-1,1,2))
-      fname <- paste('BCM2014_djf',wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
+        aver <- monthlytowyrave(wyrs[k], noyrs=noyrs, m=mod, v=var, #change to oneyrave
+        cdir=paste(idir,var,'/',sep=''), tdir=tdir, wyrIn=wyrIn, submonths=c(-1,1,2))
+        fname <- paste('BCM2014_djf',wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
     } else if(var == 'tmx') {
-      aver <- monthlytowyrave(wyrs[k], noyrs=noyrs, m=mod, v=var, #change to oneyrave
-                        cdir=paste(idir,var,'/',sep=''), tdir=tdir, wyrIn=wyrIn, submonths=c(6:8))
-      fname <- paste('BCM2014_jja',wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
+        aver <- monthlytowyrave(wyrs[k], noyrs=noyrs, m=mod, v=var, #change to oneyrave
+        cdir=paste(idir,var,'/',sep=''), tdir=tdir, wyrIn=wyrIn, submonths=c(6:8))
+        fname <- paste('BCM2014_jja',wyrs[k],"_wy_ave_",mod,".Rdata",sep="")
     }
     
     aver <- readAll(aver)
